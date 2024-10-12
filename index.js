@@ -6,13 +6,15 @@ require('dotenv').config();
 const cors = require('cors'); // Falta importar cors
 const bodyParser = require('body-parser');
 const expressQueue = require('express-queue');
-const http = require('http').createServer(app);
 
-// Configuración de CORS para Socket.io
+
+const http = require('http').createServer(app);
 const io = require('socket.io')(http, {
   cors: {
     origin: '*', // Permite todas las conexiones
-    methods: ['GET', 'POST'] // Métodos permitidos para Socket.io
+    methods: ['GET', 'POST'],
+    allowedHeaders: ['Content-Type', 'Authorization'], // Puedes ajustar según tus necesidades
+    credentials: true, // Habilitar credenciales si es necesario
   }
 });
 
@@ -91,6 +93,8 @@ io.on('connection', (socket) => {
     delete clients[socket.id]; // Eliminar el socket del registro de clientes
   });
 });
+
+
 
 // Iniciar el servidor
 http.listen(port, () => {
